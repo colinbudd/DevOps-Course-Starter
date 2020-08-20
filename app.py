@@ -8,5 +8,10 @@ app.config.from_object('flask_config.Config')
 def index():
     return render_template('index.html', tasks = session.get_items())
 
+@app.route('/', methods=['POST'])
+def add_todo():
+    session.add_item(request.form.get('title'))
+    return render_template('index.html', tasks = session.get_items())
+
 if __name__ == '__main__':
     app.run()
