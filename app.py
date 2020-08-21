@@ -1,17 +1,36 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json
 import session_items as session
 
 app = Flask(__name__)
+
 app.config.from_object('flask_config.Config')
+
+def task_sorting_key(task):
+    if (task['status'] == 'Completed'):
+        return 1
+    else:
+        return 0
 
 @app.route('/')
 def index():
-    return render_template('index.html', tasks = session.get_items())
+    return render_template('index.html', tasks = sorted(session.get_items(), key=task_sorting_key))
 
 @app.route('/', methods=['POST'])
 def add_todo():
     session.add_item(request.form.get('title'))
     return index()
+
+@app.route('/tasks/<id>', methods=['PUT'])
+def update_todo(id):
+    if (request.form.get('action') == 'mark_complete'):
+        item = session.get_item(id)
+        item['status'] = 'Completed'
+        session.save_item(item)
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+@app.route('/js/<path:path>')
+def send_js(path):
+    return send_from_directory('js', path)
 
 if __name__ == '__main__':
     app.run()

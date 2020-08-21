@@ -12,7 +12,12 @@
       <h2>Items</h2>
       <ul class="list-group mb-4">
         {% for task in tasks %}
-        <li>{{ task.title }} - <i>{{ task.status }}</i></li>
+        <li data-task-id='{{ task.id }}'>
+          <span>{{ task.title }} - <i>{{ task.status }}</i></span>
+          {% if task.status != 'Completed' %}
+          <button class="mark-complete" type="button">Mark Complete</button>
+          {% endif %}
+        </li>
         {% endfor %}
       </ul>
     </div>
