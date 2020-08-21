@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json, redirect
 import session_items as session
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ def index():
 @app.route('/', methods=['POST'])
 def add_todo():
     session.add_item(request.form.get('title'))
-    return index()
+    return redirect('/', code=303)
 
 @app.route('/tasks/<id>', methods=['PUT'])
 def update_todo(id):
@@ -27,6 +27,11 @@ def update_todo(id):
         item['status'] = 'Completed'
         session.save_item(item)
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+@app.route('/tasks/<id>', methods=['DELETE'])
+def remove_todo(id):
+    session.remove_item(id)
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 @app.route('/js/<path:path>')
 def send_js(path):
