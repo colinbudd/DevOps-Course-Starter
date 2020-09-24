@@ -20,18 +20,18 @@ def add_todo():
     session.add_item(request.form.get('title'))
     return redirect('/', code=303)
 
-@app.route('/tasks/<id>', methods=['PUT'])
+@app.route('/tasks/<id>', methods=['PATCH'])
 def update_todo(id):
     if (request.form.get('action') == 'mark_complete'):
         item = session.get_item(id)
         item['status'] = 'Completed'
         session.save_item(item)
-    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+    return json.dumps({'success':True}), 200, {'Content-Type':'application/json'} 
 
 @app.route('/tasks/<id>', methods=['DELETE'])
 def remove_todo(id):
     session.remove_item(id)
-    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    return json.dumps({'success':True}), 200, {'Content-Type':'application/json'}
 
 @app.route('/js/<path:path>')
 def send_js(path):
