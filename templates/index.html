@@ -12,19 +12,28 @@
       <h2>Items</h2>
       <ul class="list-group mb-4">
         {% for task in tasks %}
-        <li>{{ task.title }} - <i>{{ task.status }}</i></li>
+        {% if task.status != 'Completed' %}
+        <li data-task-id='{{ task.id }}' class="list-group-item">
+          {{ task.title }}
+          <span class="badge badge-danger badge-pill">{{ task.status }}</span>
+          <button class="mark-complete btn btn-outline-success" type="button">Mark Complete</button>
+          <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
+        </li>
+        {% else %}
+        <li data-task-id='{{ task.id }}' class="list-group-item list-group-item-light">
+          {{ task.title }} 
+          <span class="badge badge-success badge-pill">{{ task.status }}</span>
+          <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
+        </li>
+        {% endif %}
         {% endfor %}
-      </ul>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12">
-      <h2>New item</h2>
-      <form class="list-group mb-4" method="POST" target="/">
-        <label for="title">Title:</label>
-        <input type="text" name="title" />
-        <button type="submit">Add</button>
+        <li class="list-group-item">
+          <form class="list-group mb-4" method="POST" target="/" style="display:inline-block">
+            <label for="title">New Item:</label>
+            <input type="text" name="title" />
+            <button type="submit" class="btn btn-success">Add</button>
+          </form>
+        </li>
       </ul>
     </div>
   </div>
