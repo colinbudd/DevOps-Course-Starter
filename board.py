@@ -1,14 +1,36 @@
-from flask import session
+from config import KEY, TOKEN, USERNAME
+import requests
 
-_DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
-]
+board_id = 0
+todo_list_id = 0
+done_list_id = 0
+
+BOARD_NAME = 'TODOv1'
+
+"""
+Initialisation
+Check whether board exists. If board exists then obtain the board and list IDs.
+
+If board does not exist then create board and loop
+"""
+while board_id == 0:
+    boards = requests.get('https://api.trello.com/1/members/{USERNAME}/boards?key={KEY}}&token={TOKEN}').json()
+    for board in boards:
+        if board['name'] == BOARD_NAME:
+            board_id == board['id']
+            lists = requests.get('https://api.trello.com/1/boards/{board_id}/lists?key={KEY}}&token={TOKEN}').json()
+            for list in lists:
+                if list['name'] == 'To Do':
+                    todo_list_id = list['id']
+                elif list['name'] == 'Done':
+                    done_list_id = list['id']
+    if board_id == 0:
+        requests.post('https://api.trello.com/1/boards/?key={KEY}}&token={TOKEN}&name={BOARD_NAME}')
 
 
 def get_items():
     """
-    Fetches all saved items from the session.
+    Fetches all saved items from Trello.
 
     Returns:
         list: The list of saved items.
@@ -32,7 +54,7 @@ def get_item(id):
 
 def add_item(title):
     """
-    Adds a new item with the specified title to the session.
+    Adds a new item with the specified title to the board.
 
     Args:
         title: The title of the item.

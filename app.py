@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json, redirect
-from config import KEY, TOKEN
-import session_items as session
+import board
 
 app = Flask(__name__)
 
@@ -14,24 +13,24 @@ def task_sorting_key(task):
 
 @app.route('/')
 def index():
-    return render_template('index.html', tasks = sorted(session.get_items(), key=task_sorting_key))
+    return render_template('index.html', tasks = sorted(board.get_items(), key=task_sorting_key))
 
 @app.route('/', methods=['POST'])
 def add_todo():
-    session.add_item(request.form.get('title'))
+    board.add_item(request.form.get('title'))
     return redirect('/', code=303)
 
 @app.route('/tasks/<id>', methods=['PATCH'])
 def update_todo(id):
     if (request.form.get('action') == 'mark_complete'):
-        item = session.get_item(id)
+        item = board.get_item(id)
         item['status'] = 'Completed'
-        session.save_item(item)
+        board.save_item(item)
     return json.dumps({'success':True}), 200, {'Content-Type':'application/json'} 
 
 @app.route('/tasks/<id>', methods=['DELETE'])
 def remove_todo(id):
-    session.remove_item(id)
+    board.remove_item(id)
     return json.dumps({'success':True}), 200, {'Content-Type':'application/json'}
 
 @app.route('/js/<path:path>')

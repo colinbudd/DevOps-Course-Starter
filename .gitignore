@@ -117,3 +117,4 @@ env/
 
 ### Secrets ###
 config.py
+sample.json
