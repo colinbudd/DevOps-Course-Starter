@@ -115,5 +115,5 @@ env/
 ### Configuration files ###
 .env
 
-### Secrets
-secrets.py
+### Secrets ###
+config.py
