@@ -1,5 +1,6 @@
 from config import KEY, TOKEN, USERNAME
 import requests
+from todo_item import todo_item
 
 class board:
 
@@ -37,7 +38,11 @@ class board:
         Returns:
             list: The list of saved items.
         """
-        return requests.get('https://api.trello.com/1/boards/{self.board_id}/cards?key={KEY}&token={TOKEN}')
+        items_json = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/cards?key={KEY}&token={TOKEN}').json()
+        items = []
+        for item in items_json:
+            items.append(todo_item(item))
+        return items
 
 
     # def get_item(id):
