@@ -84,18 +84,11 @@ class board:
     #     return item
 
 
-    # def remove_item(id):
-    #     """
-    #     Deletes an existing item from the session. If no existing item matches the ID of the specified item, nothing is deleted.
+    def remove_item(self, id):
+        """
+        Deletes an existing item from the session. If no existing item matches the ID of the specified item, nothing is deleted.
 
-    #     Args:
-    #         id: The ID of the item.
-    #     """
-    #     items = get_items()
-    #     for index, item in enumerate(session['items']):
-    #         if item['id'] == int(id):
-    #             del items[index]
-    #             break
-
-    #     del session['items']
-    #     session['items'] = items
+        Args:
+            id: The ID of the item.
+        """
+        requests.delete(f'https://api.trello.com/1/cards/{id}?key={KEY}&token={TOKEN}')

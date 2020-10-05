@@ -30,10 +30,10 @@ def add_todo():
 #         board.save_item(item)
 #     return json.dumps({'success':True}), 200, {'Content-Type':'application/json'} 
 
-# @app.route('/tasks/<id>', methods=['DELETE'])
-# def remove_todo(id):
-#     board.remove_item(id)
-#     return json.dumps({'success':True}), 200, {'Content-Type':'application/json'}
+@app.route('/tasks/<id>', methods=['DELETE'])
+def remove_todo(id):
+    my_board.remove_item(id)
+    return json.dumps({'success':True}), 200, {'Content-Type':'application/json'}
 
 @app.route('/js/<path:path>')
 def send_js(path):
