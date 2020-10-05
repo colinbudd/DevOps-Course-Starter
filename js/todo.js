@@ -3,8 +3,7 @@ $(function () {
         let id = $(this).parent().attr('data-task-id');
         $.ajax({
             method: "PATCH",
-            url: "/tasks/" + id,
-            data: { action: "mark_complete" }
+            url: "/complete_item/" + id
         }).done(function( msg ) {
             location.reload();
         });

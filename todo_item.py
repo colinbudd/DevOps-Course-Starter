@@ -10,6 +10,9 @@ class todo_item:
         """
         self._title = json['name']
         self._id = json['id']
+        list_json = requests.get(f'https://api.trello.com/1/cards/{self._id}/list?key={KEY}&token={TOKEN}').json()
+        self._list = list_json['name']
+
 
     @property
     def title(self):
@@ -21,4 +24,4 @@ class todo_item:
 
     @property
     def status(self):
-        return "Completed"
+        return self._list

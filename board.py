@@ -30,7 +30,6 @@ class board:
         print(f'Board: {self.board_id}; todo: {self.todo_list_id}; done: {self.done_list_id}')
 
 
-
     def get_items(self):
         """
         Fetches all TODO items.
@@ -45,20 +44,6 @@ class board:
         return items
 
 
-    # def get_item(id):
-    #     """
-    #     Fetches the saved item with the specified ID.
-
-    #     Args:
-    #         id: The ID of the item.
-
-    #     Returns:
-    #         item: The saved item, or None if no items match the specified ID.
-    #     """
-    #     items = get_items()
-    #     return next((item for item in items if item['id'] == int(id)), None)
-
-
     def add_item(self, title):
         """
         Adds a new item with the specified title to the board.
@@ -69,24 +54,22 @@ class board:
         requests.post(f'https://api.trello.com/1/cards?key={KEY}&token={TOKEN}&idList={self.todo_list_id}&name={title}')
 
 
-    # def save_item(item):
-    #     """
-    #     Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
+    def complete_item(self, id):
+        """
+        Removes an item from the 'todo' list and then adds a copy to the 'done' list.
 
-    #     Args:
-    #         item: The item to save.
-    #     """
-    #     existing_items = get_items()
-    #     updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
-
-    #     session['items'] = updated_items
-
-    #     return item
+        Args:
+            id: The ID of the item.
+        """
+        item_json = requests.get(f'https://api.trello.com/1/cards/{id}?key={KEY}&token={TOKEN}').json()
+        item_name = item_json['name']
+        requests.delete(f'https://api.trello.com/1/cards/{id}?key={KEY}&token={TOKEN}')
+        requests.post(f'https://api.trello.com/1/cards?key={KEY}&token={TOKEN}&idList={self.done_list_id}&name={item_name}')
 
 
     def remove_item(self, id):
         """
-        Deletes an existing item from the session. If no existing item matches the ID of the specified item, nothing is deleted.
+        Deletes an existing item from the board.
 
         Args:
             id: The ID of the item.

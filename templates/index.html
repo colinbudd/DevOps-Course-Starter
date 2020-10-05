@@ -12,7 +12,7 @@
       <h2>Items</h2>
       <ul class="list-group mb-4">
         {% for task in tasks %}
-        {% if task.status != 'Completed' %}
+        {% if task.status != 'Done' %}
         <li data-task-id='{{ task.id }}' class="list-group-item">
           {{ task.title }}
           <span class="badge badge-danger badge-pill">{{ task.status }}</span>

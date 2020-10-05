@@ -8,7 +8,7 @@ app.config.from_object('flask_config.Config')
 my_board = board()
 
 def task_sorting_key(task):
-    if (task.status == 'Completed'):
+    if (task.status == 'Done'):
         return 1
     else:
         return 0
@@ -22,13 +22,10 @@ def add_todo():
     my_board.add_item(request.form.get('title'))
     return redirect('/', code=303)
 
-# @app.route('/tasks/<id>', methods=['PATCH'])
-# def update_todo(id):
-#     if (request.form.get('action') == 'mark_complete'):
-#         item = board.get_item(id)
-#         item['status'] = 'Completed'
-#         board.save_item(item)
-#     return json.dumps({'success':True}), 200, {'Content-Type':'application/json'} 
+@app.route('/complete_item/<id>', methods=['PATCH'])
+def update_todo(id):
+    my_board.complete_item(id)
+    return json.dumps({'success':True}), 200, {'Content-Type':'application/json'} 
 
 @app.route('/tasks/<id>', methods=['DELETE'])
 def remove_todo(id):
