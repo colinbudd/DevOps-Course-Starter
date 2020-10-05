@@ -1,5 +1,6 @@
 from config import KEY, TOKEN
 import requests
+from datetime import datetime
 
 class todo_item:
 
@@ -11,6 +12,9 @@ class todo_item:
         self._title = json['name']
         self._id = json['id']
         self._description = json['desc']
+        self._due = json['due']
+        if json['due']:
+            self._due = datetime.strptime(json['due'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime("%A, %d %b %Y")
         list_json = requests.get(f'https://api.trello.com/1/cards/{self._id}/list?key={KEY}&token={TOKEN}').json()
         self._list = list_json['name']
 
@@ -26,6 +30,10 @@ class todo_item:
     @property
     def description(self):
         return self._description
+
+    @property
+    def due(self):
+        return self._due
 
     @property
     def status(self):

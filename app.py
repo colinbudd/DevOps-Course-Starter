@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json, redirect
 from board import board
+import datetime
 
 app = Flask(__name__)
 
@@ -19,7 +20,8 @@ def index():
 
 @app.route('/', methods=['POST'])
 def add_todo():
-    my_board.add_item(request.form.get('title'), request.form.get('description'))
+    due_obj = datetime.datetime.strptime(request.form.get('due'), '%d/%m/%Y')
+    my_board.add_item(request.form.get('title'), request.form.get('description'), due_obj)
     return redirect('/', code=303)
 
 @app.route('/complete_item/<id>', methods=['PATCH'])

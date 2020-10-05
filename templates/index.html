@@ -20,6 +20,8 @@
           <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
           <br>
           <i>{{ task.description}}</i>
+          <br>
+          Due: <b>{{ task.due }}</b>
         </li>
         {% else %}
         <li data-task-id='{{ task.id }}' class="list-group-item list-group-item-light">
@@ -28,6 +30,8 @@
           <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
           <br>
           <i>{{ task.description}}</i>
+          <br>
+          Due: <b>{{ task.due }}</b>
         </li>
         {% endif %}
         {% endfor %}
@@ -38,6 +42,9 @@
             <br>
             <label for="description">Description:</label>
             <textarea name="description" rows="5"></textarea>
+            <br>
+            <label for="due">Due:</label>
+            <input type="text" name="due" class="datepicker">
             <br>
             <button type="submit" class="btn btn-success">Add</button>
           </form>
