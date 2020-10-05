@@ -19,7 +19,7 @@ def index():
 
 @app.route('/', methods=['POST'])
 def add_todo():
-    my_board.add_item(request.form.get('title'))
+    my_board.add_item(request.form.get('title'), request.form.get('description'))
     return redirect('/', code=303)
 
 @app.route('/complete_item/<id>', methods=['PATCH'])

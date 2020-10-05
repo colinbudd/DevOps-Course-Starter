@@ -18,12 +18,16 @@
           <span class="badge badge-danger badge-pill">{{ task.status }}</span>
           <button class="mark-complete btn btn-outline-success" type="button">Mark Complete</button>
           <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
+          <br>
+          <i>{{ task.description}}</i>
         </li>
         {% else %}
         <li data-task-id='{{ task.id }}' class="list-group-item list-group-item-light">
           {{ task.title }} 
           <span class="badge badge-success badge-pill">{{ task.status }}</span>
           <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
+          <br>
+          <i>{{ task.description}}</i>
         </li>
         {% endif %}
         {% endfor %}
@@ -31,6 +35,10 @@
           <form class="list-group mb-4" method="POST" target="/" style="display:inline-block">
             <label for="title">New Item:</label>
             <input type="text" name="title" />
+            <br>
+            <label for="description">Description:</label>
+            <textarea name="description" rows="5"></textarea>
+            <br>
             <button type="submit" class="btn btn-success">Add</button>
           </form>
         </li>

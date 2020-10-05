@@ -44,14 +44,14 @@ class board:
         return items
 
 
-    def add_item(self, title):
+    def add_item(self, title, description):
         """
-        Adds a new item with the specified title to the board.
+        Adds a new item with the specified title and description to the board.
 
         Args:
             title: The title of the item.
         """
-        requests.post(f'https://api.trello.com/1/cards?key={KEY}&token={TOKEN}&idList={self.todo_list_id}&name={title}')
+        requests.post(f'https://api.trello.com/1/cards?key={KEY}&token={TOKEN}&idList={self.todo_list_id}&name={title}&desc={description}')
 
 
     def complete_item(self, id):
@@ -63,8 +63,9 @@ class board:
         """
         item_json = requests.get(f'https://api.trello.com/1/cards/{id}?key={KEY}&token={TOKEN}').json()
         item_name = item_json['name']
+        item_desc = item_json['desc']
         requests.delete(f'https://api.trello.com/1/cards/{id}?key={KEY}&token={TOKEN}')
-        requests.post(f'https://api.trello.com/1/cards?key={KEY}&token={TOKEN}&idList={self.done_list_id}&name={item_name}')
+        requests.post(f'https://api.trello.com/1/cards?key={KEY}&token={TOKEN}&idList={self.done_list_id}&name={item_name}&desc={item_desc}')
 
 
     def remove_item(self, id):
