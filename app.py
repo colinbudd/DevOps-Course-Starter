@@ -20,7 +20,10 @@ def index():
 
 @app.route('/', methods=['POST'])
 def add_todo():
-    due_obj = datetime.datetime.strptime(request.form.get('due'), '%d/%m/%Y')
+    if request.form.get('due'):
+        due_obj = datetime.datetime.strptime(request.form.get('due'), '%d/%m/%Y')
+    else:
+        due_obj = None
     my_board.add_item(request.form.get('title'), request.form.get('description'), due_obj)
     return redirect('/', code=303)
 
