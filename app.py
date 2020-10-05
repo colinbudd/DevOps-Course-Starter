@@ -8,7 +8,7 @@ app.config.from_object('flask_config.Config')
 my_board = board()
 
 def task_sorting_key(task):
-    if (task['status'] == 'Completed'):
+    if (task.status == 'Completed'):
         return 1
     else:
         return 0
@@ -17,10 +17,10 @@ def task_sorting_key(task):
 def index():
     return render_template('index.html', tasks = sorted(my_board.get_items(), key=task_sorting_key))
 
-# @app.route('/', methods=['POST'])
-# def add_todo():
-#     board.add_item(request.form.get('title'))
-#     return redirect('/', code=303)
+@app.route('/', methods=['POST'])
+def add_todo():
+    my_board.add_item(request.form.get('title'))
+    return redirect('/', code=303)
 
 # @app.route('/tasks/<id>', methods=['PATCH'])
 # def update_todo(id):

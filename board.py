@@ -59,28 +59,14 @@ class board:
     #     return next((item for item in items if item['id'] == int(id)), None)
 
 
-    # def add_item(title):
-    #     """
-    #     Adds a new item with the specified title to the board.
+    def add_item(self, title):
+        """
+        Adds a new item with the specified title to the board.
 
-    #     Args:
-    #         title: The title of the item.
-
-    #     Returns:
-    #         item: The saved item.
-    #     """
-    #     items = get_items()
-
-    #     # Determine the ID for the item based on that of the previously added item
-    #     id = items[-1]['id'] + 1 if items else 0
-
-    #     item = { 'id': id, 'title': title, 'status': 'Not Started' }
-
-    #     # Add the item to the list
-    #     items.append(item)
-    #     session['items'] = items
-
-    #     return item
+        Args:
+            title: The title of the item.
+        """
+        requests.post(f'https://api.trello.com/1/cards?key={KEY}&token={TOKEN}&idList={self.todo_list_id}&name={title}')
 
 
     # def save_item(item):
