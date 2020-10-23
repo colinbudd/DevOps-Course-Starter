@@ -1,37 +1,41 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json, redirect
-import session_items as session
+from board import board
+import datetime
 
 app = Flask(__name__)
 
 app.config.from_object('flask_config.Config')
 
+my_board = board()
+
 def task_sorting_key(task):
-    if (task['status'] == 'Completed'):
+    if (task.status == 'Done'):
         return 1
     else:
         return 0
 
 @app.route('/')
 def index():
-    return render_template('index.html', tasks = sorted(session.get_items(), key=task_sorting_key))
+    return render_template('index.html', tasks = sorted(my_board.get_items(), key=task_sorting_key))
 
 @app.route('/', methods=['POST'])
 def add_todo():
-    session.add_item(request.form.get('title'))
+    if request.form.get('due'):
+        due_obj = datetime.datetime.strptime(request.form.get('due'), '%d/%m/%Y')
+    else:
+        due_obj = None
+    my_board.add_item(request.form.get('title'), request.form.get('description'), due_obj)
     return redirect('/', code=303)
 
-@app.route('/tasks/<id>', methods=['PUT'])
+@app.route('/complete_item/<id>', methods=['PATCH'])
 def update_todo(id):
-    if (request.form.get('action') == 'mark_complete'):
-        item = session.get_item(id)
-        item['status'] = 'Completed'
-        session.save_item(item)
-    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+    my_board.complete_item(id)
+    return json.dumps({'success':True}), 200, {'Content-Type':'application/json'} 
 
 @app.route('/tasks/<id>', methods=['DELETE'])
 def remove_todo(id):
-    session.remove_item(id)
-    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    my_board.remove_item(id)
+    return json.dumps({'success':True}), 200, {'Content-Type':'application/json'}
 
 @app.route('/js/<path:path>')
 def send_js(path):

@@ -1,17 +1,14 @@
 $(function () {
-    // Mark complete button
     $('button.mark-complete').on('click', function () {
         let id = $(this).parent().attr('data-task-id');
         $.ajax({
-            method: "PUT",
-            url: "/tasks/" + id,
-            data: { action: "mark_complete" }
+            method: "PATCH",
+            url: "/complete_item/" + id
         }).done(function( msg ) {
             location.reload();
         });
     })
 
-    // Remove todo item button
     $('button.remove-task').on('click', function () {
         let id = $(this).parent().attr('data-task-id');
         $.ajax({
@@ -21,4 +18,9 @@ $(function () {
             location.reload();
         });
     })
+
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        startDate: '+0d'
+    });
 })
