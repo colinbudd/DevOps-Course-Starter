@@ -11,7 +11,7 @@
     <div class="col-md-12">
       <h2>Items</h2>
       <ul class="list-group mb-4">
-        {% for task in tasks %}
+        {% for task in view_model.items %}
         {% if task.status != 'Done' %}
         <li data-task-id='{{ task.id }}' class="list-group-item">
           {{ task.title }}

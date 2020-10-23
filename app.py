@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json, redirect
 from board import Board
+from view_model import ViewModel
 import datetime
 
 app = Flask(__name__)
@@ -16,7 +17,8 @@ def task_sorting_key(task):
 
 @app.route('/')
 def index():
-    return render_template('index.html', tasks = sorted(my_board.get_items(), key=task_sorting_key))
+    item_view_model = ViewModel(sorted(my_board.get_items(), key=task_sorting_key)) 
+    return render_template('index.html', view_model = item_view_model)
 
 @app.route('/', methods=['POST'])
 def add_todo():
