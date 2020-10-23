@@ -2,6 +2,8 @@ from config import KEY, TOKEN
 import requests
 from datetime import datetime
 
+trello_auth_params = {"key": KEY, "token": TOKEN}
+
 class TodoItem:
 
     def __init__(self, json):
@@ -15,7 +17,7 @@ class TodoItem:
         self._due = json['due']
         if json['due']:
             self._due = datetime.strptime(json['due'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime("%A, %d %b %Y")
-        list_json = requests.get(f'https://api.trello.com/1/cards/{self._id}/list?key={KEY}&token={TOKEN}').json()
+        list_json = requests.get(f'https://api.trello.com/1/cards/{self._id}/list', params=trello_auth_params).json()
         self._list = list_json['name']
 
 

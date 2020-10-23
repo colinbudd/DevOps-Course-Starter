@@ -2,6 +2,8 @@ from config import KEY, TOKEN, USERNAME, BOARD_NAME
 import requests
 from todo_item import TodoItem
 
+trello_auth_params = {"key": KEY, "token": TOKEN}
+
 class Board:
 
     def __init__(self):
@@ -13,21 +15,11 @@ class Board:
         """
         self.board_id = 0
         while self.board_id == 0:
-            boards = requests.get(
-                f'https://api.trello.com/1/members/{USERNAME}/boards',
-                params={
-                    "key": KEY,
-                    "token": TOKEN
-                }).json()
+            boards = requests.get(f'https://api.trello.com/1/members/{USERNAME}/boards', params=trello_auth_params).json()
             for board in boards:
                 if board['name'] == BOARD_NAME:
                     self.board_id = board['id']
-                    lists = requests.get(
-                        f'https://api.trello.com/1/boards/{self.board_id}/lists',
-                        params={
-                            "key": KEY,
-                             "token": TOKEN
-                        }).json()
+                    lists = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/lists', params=trello_auth_params).json()
                     for list in lists:
                         if list['name'].lower() == 'to do':
                             self.todo_list_id = list['id']
@@ -35,13 +27,9 @@ class Board:
                             self.done_list_id = list['id']
             if self.board_id == 0:
                 print(f'Creating new board')
-                requests.post(
-                    f'https://api.trello.com/1/boards/',
-                    params={
-                        "key": KEY,
-                        "token": TOKEN,
-                        "name": BOARD_NAME
-                    })
+                post_params = trello_auth_params.copy()
+                post_params['name'] = BOARD_NAME
+                requests.post(f'https://api.trello.com/1/boards/', params=post_params)
         print(f'Board: {self.board_id}; todo: {self.todo_list_id}; done: {self.done_list_id}')
 
 
@@ -52,12 +40,7 @@ class Board:
         Returns:
             list: The list of saved items.
         """
-        items_json = requests.get(
-            f'https://api.trello.com/1/boards/{self.board_id}/cards',
-            params={
-                "key": KEY, 
-                "token": TOKEN
-            }).json()
+        items_json = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/cards', params=trello_auth_params).json()
         items = []
         for item in items_json:
             items.append(TodoItem(item))
@@ -71,27 +54,15 @@ class Board:
         Args:
             title: The title of the item.
         """
+        post_params = trello_auth_params.copy()
+        post_params['idList'] = self.todo_list_id
+        post_params['name'] = title
+        post_params['desc'] = description
+
         if due:
-            requests.post(
-                f'https://api.trello.com/1/cards',
-                params={
-                    "key": KEY, 
-                    "token": TOKEN,
-                    "idList": self.todo_list_id,
-                    "name": title,
-                    "desc": description,
-                    "due": due
-                })
-        else:
-            requests.post(
-                f'https://api.trello.com/1/cards',
-                params={
-                    "key": KEY, 
-                    "token": TOKEN,
-                    "idList": self.todo_list_id,
-                    "name": title,
-                    "desc": description
-                })            
+            post_params['due'] = due
+
+        requests.post(f'https://api.trello.com/1/cards', params=post_params)
 
 
     def complete_item(self, id):
@@ -101,42 +72,19 @@ class Board:
         Args:
             id: The ID of the item.
         """
-        item_json = requests.get(
-            f'https://api.trello.com/1/cards/{id}',
-            params={
-                "key": KEY, 
-                "token": TOKEN
-            }).json()
-        item_name = item_json['name']
-        item_desc = item_json['desc']
-        item_due = item_json['due']
-        requests.delete(
-            f'https://api.trello.com/1/cards/{id}',
-            params={
-                "key": KEY,
-                "token": TOKEN
-            })
-        if item_due:
-            requests.post(
-                f'https://api.trello.com/1/cards',
-                params={
-                    "key": KEY, 
-                    "token": TOKEN,
-                    "idList": self.done_list_id,
-                    "name": item_name,
-                    "desc": item_desc,
-                    "due": item_due
-                })
-        else:
-            requests.post(
-                f'https://api.trello.com/1/cards',
-                params={
-                    "key": KEY, 
-                    "token": TOKEN,
-                    "idList": self.done_list_id,
-                    "name": item_name,
-                    "desc": item_desc
-                })
+        item_json = requests.get(f'https://api.trello.com/1/cards/{id}', params=trello_auth_params).json()
+        requests.delete(f'https://api.trello.com/1/cards/{id}', params=trello_auth_params)
+
+        post_params = trello_auth_params.copy()
+        post_params['idList'] = self.done_list_id
+        post_params['name'] = item_json['name']
+        post_params['desc'] = item_json['desc']
+
+        if item_json['due']:
+            post_params['due'] = item_json['due']
+
+        requests.post(f'https://api.trello.com/1/cards', params=post_params)
+
 
     def remove_item(self, id):
         """
@@ -145,9 +93,4 @@ class Board:
         Args:
             id: The ID of the item.
         """
-        requests.delete(
-            f'https://api.trello.com/1/cards/{id}', 
-            params={
-                "key": KEY, 
-                "token": TOKEN
-            })
+        requests.delete(f'https://api.trello.com/1/cards/{id}', params=trello_auth_params)
