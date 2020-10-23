@@ -1,12 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json, redirect
-from board import board
+from board import Board
 import datetime
 
 app = Flask(__name__)
 
 app.config.from_object('flask_config.Config')
 
-my_board = board()
+my_board = Board()
 
 def task_sorting_key(task):
     if (task.status == 'Done'):

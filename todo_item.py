@@ -2,7 +2,7 @@ from config import KEY, TOKEN
 import requests
 from datetime import datetime
 
-class todo_item:
+class TodoItem:
 
     def __init__(self, json):
         """
