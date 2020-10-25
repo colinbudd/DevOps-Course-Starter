@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, json, redirect
 from board import Board
 from view_model import ViewModel
+from todo_item import Status
 import datetime
 
 app = Flask(__name__)
@@ -10,7 +11,7 @@ app.config.from_object('flask_config.Config')
 my_board = Board()
 
 def task_sorting_key(task):
-    if (task.status == 'Done'):
+    if (task.status == Status.DONE):
         return 1
     else:
         return 0

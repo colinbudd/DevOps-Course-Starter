@@ -1,6 +1,6 @@
 from config import KEY, TOKEN, USERNAME, BOARD_NAME
 import requests
-from todo_item import TodoItem
+from todo_item import TodoItem, Status
 
 trello_auth_params = {"key": KEY, "token": TOKEN}
 
@@ -25,12 +25,22 @@ class Board:
                             self.todo_list_id = list['id']
                         elif list['name'].lower() == 'done':
                             self.done_list_id = list['id']
+                        elif list['name'].lower() == 'doing':
+                            self.doing_list_id = list['id']
             if self.board_id == 0:
                 print(f'Creating new board')
                 post_params = trello_auth_params.copy()
                 post_params['name'] = BOARD_NAME
                 requests.post(f'https://api.trello.com/1/boards/', params=post_params)
-        print(f'Board: {self.board_id}; todo: {self.todo_list_id}; done: {self.done_list_id}')
+
+
+    def list_to_status(self, list_id):
+        if list_id == self.todo_list_id:
+            return Status.TODO
+        elif list_id == self.doing_list_id:
+            return Status.DOING
+        elif list_id == self.done_list_id:
+            return Status.DONE
 
 
     def get_items(self):
@@ -43,7 +53,7 @@ class Board:
         items_json = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/cards', params=trello_auth_params).json()
         items = []
         for item in items_json:
-            items.append(TodoItem(item))
+            items.append(TodoItem(item, self.list_to_status(item['idList'])))
         return items
 
 

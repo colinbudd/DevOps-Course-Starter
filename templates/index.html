@@ -9,10 +9,9 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Items</h2>
+      <h2>To do Items</h2>
       <ul class="list-group mb-4">
-        {% for task in view_model.items %}
-        {% if task.status != 'Done' %}
+        {% for task in view_model.todo_items %}
         <li data-task-id='{{ task.id }}' class="list-group-item">
           {{ task.title }}
           <span class="badge badge-danger badge-pill">{{ task.status }}</span>
@@ -23,7 +22,22 @@
           <br>
           Due: <b>{{ task.due }}</b>
         </li>
-        {% else %}
+        {% endfor %}
+        <h2>Doing Items</h2>
+        {% for task in view_model.doing_items %}
+        <li data-task-id='{{ task.id }}' class="list-group-item">
+          {{ task.title }}
+          <span class="badge badge-danger badge-pill">{{ task.status }}</span>
+          <button class="mark-complete btn btn-outline-success" type="button">Mark Complete</button>
+          <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
+          <br>
+          <i>{{ task.description}}</i>
+          <br>
+          Due: <b>{{ task.due }}</b>
+        </li>
+        {% endfor %}
+        <h2>Done Items</h2>
+        {% for task in view_model.done_items %}
         <li data-task-id='{{ task.id }}' class="list-group-item list-group-item-light">
           {{ task.title }} 
           <span class="badge badge-success badge-pill">{{ task.status }}</span>
@@ -33,7 +47,6 @@
           <br>
           Due: <b>{{ task.due }}</b>
         </li>
-        {% endif %}
         {% endfor %}
         <li class="list-group-item">
           <form class="list-group mb-4" method="POST" target="/" style="display:inline-block">
