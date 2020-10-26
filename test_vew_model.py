@@ -27,8 +27,10 @@ done_item_2_id = "16c4cae4-e7ef-4a32-8677-fefc0a8406fa"
 done_item_2_desc = "description for second done item"
 done_item_2_due = "2020-10-24T02:02:02.000Z"
 
-@pytest.fixture
-def view_model_with_tasks():
+
+def test_get_todo_items():
+
+    # Arange
     todo_item_1 = TodoItem({"name": todo_item_1_name, "id": todo_item_1_id, "desc": todo_item_1_desc, "due": todo_item_1_due}, Status.TODO)
     todo_item_2 = TodoItem({"name": todo_item_2_name, "id": todo_item_2_id, "desc": todo_item_2_desc, "due": todo_item_2_due}, Status.TODO)
     doing_item_1 = TodoItem({"name": doing_item_1_name, "id": doing_item_1_id, "desc": doing_item_1_desc, "due": doing_item_1_due}, Status.DOING)
@@ -36,14 +38,73 @@ def view_model_with_tasks():
     done_item_1 = TodoItem({"name": done_item_1_name, "id": done_item_1_id, "desc": done_item_1_desc, "due": done_item_1_due}, Status.DONE)
     done_item_2 = TodoItem({"name": done_item_2_name, "id": done_item_2_id, "desc": done_item_2_desc, "due": done_item_2_due}, Status.DONE)
 
-    return ViewModel([todo_item_1, todo_item_2, doing_item_1, doing_item_2, done_item_1, done_item_2])
+    items = [todo_item_1, todo_item_2, doing_item_1, doing_item_2, done_item_1, done_item_2]
 
-
-def test_get_todo_items(view_model_with_tasks):
-
+    view_model = ViewModel(items)
+    
     # Act
-    todo_items = view_model_with_tasks.todo_items()
+    todo_items = view_model.todo_items
 
     # Assert
     assert len(todo_items) == 2
-    assert "hello" in todo_items
+    assert todo_item_1 in todo_items
+    assert todo_item_2 in todo_items
+    assert doing_item_1 not in todo_items
+    assert doing_item_2 not in todo_items
+    assert done_item_1 not in todo_items
+    assert done_item_2 not in todo_items
+
+
+def test_get_doing_items():
+
+    # Arange
+    todo_item_1 = TodoItem({"name": todo_item_1_name, "id": todo_item_1_id, "desc": todo_item_1_desc, "due": todo_item_1_due}, Status.TODO)
+    todo_item_2 = TodoItem({"name": todo_item_2_name, "id": todo_item_2_id, "desc": todo_item_2_desc, "due": todo_item_2_due}, Status.TODO)
+    doing_item_1 = TodoItem({"name": doing_item_1_name, "id": doing_item_1_id, "desc": doing_item_1_desc, "due": doing_item_1_due}, Status.DOING)
+    doing_item_2 = TodoItem({"name": doing_item_2_name, "id": doing_item_2_id, "desc": doing_item_2_desc, "due": doing_item_2_due}, Status.DOING)
+    done_item_1 = TodoItem({"name": done_item_1_name, "id": done_item_1_id, "desc": done_item_1_desc, "due": done_item_1_due}, Status.DONE)
+    done_item_2 = TodoItem({"name": done_item_2_name, "id": done_item_2_id, "desc": done_item_2_desc, "due": done_item_2_due}, Status.DONE)
+
+    items = [todo_item_1, todo_item_2, doing_item_1, doing_item_2, done_item_1, done_item_2]
+
+    view_model = ViewModel(items)
+    
+    # Act
+    doing_items = view_model.doing_items
+
+    # Assert
+    assert len(doing_items) == 2
+    assert todo_item_1 not in doing_items
+    assert todo_item_2 not in doing_items
+    assert doing_item_1 in doing_items
+    assert doing_item_2 in doing_items
+    assert done_item_1 not in doing_items
+    assert done_item_2 not in doing_items
+
+
+def test_get_done_items():
+
+    # Arange
+    todo_item_1 = TodoItem({"name": todo_item_1_name, "id": todo_item_1_id, "desc": todo_item_1_desc, "due": todo_item_1_due}, Status.TODO)
+    todo_item_2 = TodoItem({"name": todo_item_2_name, "id": todo_item_2_id, "desc": todo_item_2_desc, "due": todo_item_2_due}, Status.TODO)
+    doing_item_1 = TodoItem({"name": doing_item_1_name, "id": doing_item_1_id, "desc": doing_item_1_desc, "due": doing_item_1_due}, Status.DOING)
+    doing_item_2 = TodoItem({"name": doing_item_2_name, "id": doing_item_2_id, "desc": doing_item_2_desc, "due": doing_item_2_due}, Status.DOING)
+    done_item_1 = TodoItem({"name": done_item_1_name, "id": done_item_1_id, "desc": done_item_1_desc, "due": done_item_1_due}, Status.DONE)
+    done_item_2 = TodoItem({"name": done_item_2_name, "id": done_item_2_id, "desc": done_item_2_desc, "due": done_item_2_due}, Status.DONE)
+
+    items = [todo_item_1, todo_item_2, doing_item_1, doing_item_2, done_item_1, done_item_2]
+
+    view_model = ViewModel(items)
+    
+    # Act
+    done_items = view_model.done_items
+
+    # Assert
+    assert len(done_items) == 2
+    assert todo_item_1 not in done_items
+    assert todo_item_2 not in done_items
+    assert doing_item_1 not in done_items
+    assert doing_item_2 not in done_items
+    assert done_item_1 in done_items
+    assert done_item_2 in done_items
+
