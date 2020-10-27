@@ -1,4 +1,5 @@
 from todo_item import Status
+from datetime import date
 
 class ViewModel:
     def __init__(self, items):
@@ -31,17 +32,17 @@ class ViewModel:
 
     @property
     def recent_done_items(self):
-        return ViewModel.filter_items_after_date(self.done_items, now)
+        return ViewModel.filter_items_after_time(self.done_items, date.today().strftime('%Y-%m-%dT%H:%M:%S.%fZ'))
 
     @property
     def older_done_items(self):
-        return ViewModel.filter_items_before_date(self.done_items, now)
+        return ViewModel.filter_items_before_time(self.done_items, date.today().strftime('%Y-%m-%dT%H:%M:%S.%fZ'))
 
     @staticmethod
-    def filter_items_before_date(items, date):
-        return [n for n in items if n.due_raw < date]
+    def filter_items_before_time(items, time):
+        return [n for n in items if n.due_raw < time]
 
     @staticmethod
-    def filter_items_after_date(items, date):
-        return [n for n in items if n.due_raw >= date]
+    def filter_items_after_time(items, time):
+        return [n for n in items if n.due_raw >= time]
 
