@@ -22,8 +22,8 @@ class TodoItem:
         self._title = json['name']
         self._id = json['id']
         self._description = json['desc']
-        self._due_raw = json['due']
         self._due = json['due']
+        self._last_activity = json['dateLastActivity']
         if json['due']:
             self._due = datetime.strptime(json['due'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime("%A, %d %b %Y")
 
@@ -44,9 +44,9 @@ class TodoItem:
         return self._due
 
     @property
-    def due_raw(self):
-        return self._due_raw
-
-    @property
     def status(self):
         return self._status
+
+    @property
+    def last_activity(self):
+        return self._last_activity
