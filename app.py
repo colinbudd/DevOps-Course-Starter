@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 from board import Board
 from view_model import ViewModel
 from todo_item import Status
-import datetime
+from datetime import date, datetime
 
 app = Flask(__name__)
 
@@ -19,12 +19,12 @@ def task_sorting_key(task):
 @app.route('/')
 def index():
     item_view_model = ViewModel(sorted(my_board.get_items(), key=task_sorting_key)) 
-    return render_template('index.html', view_model = item_view_model)
+    return render_template('index.html', view_model = item_view_model, today = date.today())
 
 @app.route('/', methods=['POST'])
 def add_todo():
     if request.form.get('due'):
-        due_obj = datetime.datetime.strptime(request.form.get('due'), '%d/%m/%Y')
+        due_obj = datetime.strptime(request.form.get('due'), '%d/%m/%Y')
     else:
         due_obj = None
     my_board.add_item(request.form.get('title'), request.form.get('description'), due_obj)

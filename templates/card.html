@@ -1,0 +1,14 @@
+<li data-task-id='{{ task.id }}' class="list-group-item list-group-item-light">
+  <strong>{{ task.title }}</strong>
+  {% if task.description %}
+  <br>
+  <i>{{ task.description}}</i>
+  {% endif %}
+  <br>
+  Due: <b>{{ task.due }}</b>
+  <br>
+  {% if status != 'DONE' %}
+  <button class="mark-complete btn btn-outline-success" type="button">Mark Complete</button>
+  {% endif %}
+  <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
+</li>
