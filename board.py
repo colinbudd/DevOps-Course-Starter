@@ -75,20 +75,25 @@ class Board:
         requests.post(f'https://api.trello.com/1/cards', params=post_params)
 
 
-    def complete_item(self, id):
+    def move_item(self, id, targetList):
         """
-        Removes an item from the 'todo' list and then adds a copy to the 'done' list.
+        Removes an item from one list and then adds a copy to a target list.
 
         Args:
             id: The ID of the item.
+            targetList: The target list to add the item to.
         """
         item_json = requests.get(f'https://api.trello.com/1/cards/{id}', params=trello_auth_params).json()
         requests.delete(f'https://api.trello.com/1/cards/{id}', params=trello_auth_params)
 
         post_params = trello_auth_params.copy()
-        post_params['idList'] = self.done_list_id
         post_params['name'] = item_json['name']
         post_params['desc'] = item_json['desc']
+
+        if (targetList == "DOING"):
+            post_params['idList'] = self.doing_list_id
+        else:
+            post_params['idList'] = self.done_list_id
 
         if item_json['due']:
             post_params['due'] = item_json['due']

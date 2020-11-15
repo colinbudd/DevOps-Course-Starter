@@ -30,9 +30,9 @@ def add_todo():
     my_board.add_item(request.form.get('title'), request.form.get('description'), due_obj)
     return redirect('/', code=303)
 
-@app.route('/complete_item/<id>', methods=['PATCH'])
+@app.route('/tasks/<id>', methods=['PATCH'])
 def update_todo(id):
-    my_board.complete_item(id)
+    my_board.move_item(id, request.form.get('targetList'))
     return json.dumps({'success':True}), 200, {'Content-Type':'application/json'} 
 
 @app.route('/tasks/<id>', methods=['DELETE'])
