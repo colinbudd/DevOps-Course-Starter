@@ -2,9 +2,9 @@ from todo_item import Status
 from datetime import date
 
 class ViewModel:
-    def __init__(self, items):
+    def __init__(self, items, show_all_done_items):
         self._items = items
-        self._show_all_done_items = False
+        self._show_all_done_items = show_all_done_items == "True"
 
     @property
     def items(self):

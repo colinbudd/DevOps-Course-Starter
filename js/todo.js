@@ -21,6 +21,16 @@ $(function () {
         });
     });
 
+    $('input.showAllDoneItems').on('change', function () {
+        if ($(this).is(':checked')) {
+            document.cookie = 'showAllDoneItems=True; path=/';
+        }
+        else {
+            document.cookie = 'showAllDoneItems=; path=/';
+        }
+        location.reload();
+    });
+
     $('.datepicker').datepicker({
         format: 'dd/mm/yyyy',
         startDate: '+0d'
