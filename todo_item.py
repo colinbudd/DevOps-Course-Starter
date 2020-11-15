@@ -1,8 +1,5 @@
-from config import KEY, TOKEN
 from enum import Enum
 from datetime import datetime
-
-trello_auth_params = {"key": KEY, "token": TOKEN}
 
 
 class Status(Enum):

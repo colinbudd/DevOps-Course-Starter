@@ -4,11 +4,19 @@ from view_model import ViewModel
 from todo_item import Status
 from datetime import date, datetime
 
-app = Flask(__name__)
 
-app.config.from_object('flask_config.Config')
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('flask_config.Config')
+
+    # All the routes and setup code etc
+
+    return app
+
 
 my_board = Board()
+
+app = create_app()
 
 def task_sorting_key(task):
     if (task.status == Status.DONE):

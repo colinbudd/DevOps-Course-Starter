@@ -1,8 +1,8 @@
-from config import KEY, TOKEN, USERNAME, BOARD_NAME
+from trello_config import TrelloConfig
 import requests
 from todo_item import TodoItem, Status
 
-trello_auth_params = {"key": KEY, "token": TOKEN}
+trello_auth_params = {"key": TrelloConfig.KEY, "token": TrelloConfig.TOKEN}
 
 class Board:
 
@@ -15,9 +15,9 @@ class Board:
         """
         self.board_id = 0
         while self.board_id == 0:
-            boards = requests.get(f'https://api.trello.com/1/members/{USERNAME}/boards', params=trello_auth_params).json()
+            boards = requests.get(f'https://api.trello.com/1/members/{TrelloConfig.USERNAME}/boards', params=trello_auth_params).json()
             for board in boards:
-                if board['name'] == BOARD_NAME:
+                if board['name'] == TrelloConfig.BOARD_NAME:
                     self.board_id = board['id']
                     lists = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/lists', params=trello_auth_params).json()
                     for list in lists:
@@ -30,7 +30,7 @@ class Board:
             if self.board_id == 0:
                 print(f'Creating new board')
                 post_params = trello_auth_params.copy()
-                post_params['name'] = BOARD_NAME
+                post_params['name'] = TrelloConfig.BOARD_NAME
                 requests.post(f'https://api.trello.com/1/boards/', params=post_params)
 
 
