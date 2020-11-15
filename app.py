@@ -18,8 +18,8 @@ def task_sorting_key(task):
 
 @app.route('/')
 def index():
-    show_all_done_items = request.cookies.get('showAllDoneItems')
-    item_view_model = ViewModel(sorted(my_board.get_items(), key=task_sorting_key), show_all_done_items) 
+    item_view_model = ViewModel(sorted(my_board.get_items(), key=task_sorting_key)) 
+    item_view_model.show_all_done_items = request.cookies.get('showAllDoneItems') == 'True'
     return render_template('index.html', view_model = item_view_model, today = date.today())
 
 @app.route('/', methods=['POST'])
