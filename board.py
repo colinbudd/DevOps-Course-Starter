@@ -4,15 +4,20 @@ from todo_item import TodoItem, Status
 
 class Board:
 
-    def __init__(self):
+    def __init__(self, board_id=0, todo_list_id=0, doing_list_id=0, done_list_id=0):
         """
         Initialisation
-        Check whether board exists. If board exists then obtain the board and list IDs.
+        Use board and list IDs if supplied.
 
-        If board does not exist then create board and repeat loop to obtain IDs.
+        Otherwise check whether board already exists.
+        If board exists then obtain the board and list IDs.
+        If not then create board and repeat loop to obtain IDs.
         """
         self.trello_auth_params = {"key": os.environ['TRELLO_KEY'], "token": os.environ['TRELLO_TOKEN']}
-        self.board_id = 0
+        self.board_id = board_id
+        self.doing_list_id = doing_list_id
+        self.done_list_id = done_list_id
+        self.todo_list_id = todo_list_id
         while self.board_id == 0:
             boards = requests.get(f'https://api.trello.com/1/members/{os.environ["TRELLO_USERNAME"]}/boards', params=self.trello_auth_params).json()
             for board in boards:
