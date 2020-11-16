@@ -1,8 +1,6 @@
-from trello_config import TrelloConfig
 import requests
+import os
 from todo_item import TodoItem, Status
-
-trello_auth_params = {"key": TrelloConfig.KEY, "token": TrelloConfig.TOKEN}
 
 class Board:
 
@@ -13,13 +11,14 @@ class Board:
 
         If board does not exist then create board and repeat loop to obtain IDs.
         """
+        self.trello_auth_params = {"key": os.environ['TRELLO_KEY'], "token": os.environ['TRELLO_TOKEN']}
         self.board_id = 0
         while self.board_id == 0:
-            boards = requests.get(f'https://api.trello.com/1/members/{TrelloConfig.USERNAME}/boards', params=trello_auth_params).json()
+            boards = requests.get(f'https://api.trello.com/1/members/{os.environ["TRELLO_USERNAME"]}/boards', params=self.trello_auth_params).json()
             for board in boards:
-                if board['name'] == TrelloConfig.BOARD_NAME:
+                if board['name'] == os.environ['TRELLO_BOARD_NAME']:
                     self.board_id = board['id']
-                    lists = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/lists', params=trello_auth_params).json()
+                    lists = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/lists', params=self.trello_auth_params).json()
                     for list in lists:
                         if list['name'].lower() == 'to do':
                             self.todo_list_id = list['id']
@@ -29,8 +28,8 @@ class Board:
                             self.doing_list_id = list['id']
             if self.board_id == 0:
                 print(f'Creating new board')
-                post_params = trello_auth_params.copy()
-                post_params['name'] = TrelloConfig.BOARD_NAME
+                post_params = self.trello_auth_params.copy()
+                post_params['name'] = os.environ['TRELLO_BOARD_NAME']
                 requests.post(f'https://api.trello.com/1/boards/', params=post_params)
 
 
@@ -50,7 +49,7 @@ class Board:
         Returns:
             list: The list of saved items.
         """
-        items_json = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/cards', params=trello_auth_params).json()
+        items_json = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/cards', params=self.trello_auth_params).json()
         items = []
         for item in items_json:
             items.append(TodoItem(item, self.list_to_status(item['idList'])))
@@ -64,7 +63,7 @@ class Board:
         Args:
             title: The title of the item.
         """
-        post_params = trello_auth_params.copy()
+        post_params = self.trello_auth_params.copy()
         post_params['idList'] = self.todo_list_id
         post_params['name'] = title
         post_params['desc'] = description
@@ -83,10 +82,10 @@ class Board:
             id: The ID of the item.
             targetList: The target list to add the item to.
         """
-        item_json = requests.get(f'https://api.trello.com/1/cards/{id}', params=trello_auth_params).json()
-        requests.delete(f'https://api.trello.com/1/cards/{id}', params=trello_auth_params)
+        item_json = requests.get(f'https://api.trello.com/1/cards/{id}', params=self.trello_auth_params).json()
+        requests.delete(f'https://api.trello.com/1/cards/{id}', params=self.trello_auth_params)
 
-        post_params = trello_auth_params.copy()
+        post_params = self.trello_auth_params.copy()
         post_params['name'] = item_json['name']
         post_params['desc'] = item_json['desc']
 
@@ -108,4 +107,4 @@ class Board:
         Args:
             id: The ID of the item.
         """
-        requests.delete(f'https://api.trello.com/1/cards/{id}', params=trello_auth_params)
+        requests.delete(f'https://api.trello.com/1/cards/{id}', params=self.trello_auth_params)
