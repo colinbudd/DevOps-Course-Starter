@@ -58,3 +58,4 @@ The `.env` file also holds Trello secrets. Edit this file to set the following v
 * TRELLO_KEY
 * TRELLO_USERNAME
 * TRELLO_BOARD_NAME
+* TRELLO_BOARD_ID
