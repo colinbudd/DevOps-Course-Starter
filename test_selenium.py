@@ -51,24 +51,53 @@ def test_task_journey(driver, test_app):
     # Wait for the page reload
 
     w = WebDriverWait(driver, 8)
-    w.until(condition_to_find_element_with_title(todo_title))
+    w.until(condition_to_find_element_with_title('todo-list', todo_title))
 
     # Check the new item
 
-    card = driver.find_element_by_xpath(xpath_to_find_card_with_title(todo_title))
+    card = get_card_with_title(driver, 'todo-list', todo_title)
     
-    description = card.find_elements_by_class_name('todo-description')[0].text
+    description = card.find_element_by_class_name('todo-description').text
+    assert description == todo_description
 
+    # Click the start button
+
+    card.find_element_by_class_name('move-doing-list').click()
+
+    # Wait for the page reload
+
+    w = WebDriverWait(driver, 8)
+    w.until(condition_to_find_element_with_title('doing-list', todo_title))
+
+    # Check the started item
+
+    card = get_card_with_title(driver, 'doing-list', todo_title)
+    
+    description = card.find_element_by_class_name('todo-description').text
     assert description == todo_description
 
     # Click the complete button
+
+    card.find_element_by_class_name('move-done-list').click()
+
+    # Wait for the page reload
+
+    w = WebDriverWait(driver, 8)
+    w.until(condition_to_find_element_with_title('done-list', todo_title))
+
+    # Check the completed item
+
+    card = get_card_with_title(driver, 'done-list', todo_title)
+    
+    description = card.find_element_by_class_name('todo-description').text
+    assert description == todo_description
 
 
 
 # Helper methods
 
-def condition_to_find_element_with_title(title):
-    return expected_conditions.presence_of_element_located((By.XPATH, f'//*[contains(@class, "todo-title")][text() = "{title}"]'))
+def condition_to_find_element_with_title(list_id, title):
+    return expected_conditions.presence_of_element_located((By.XPATH, f'//*[@id="{list_id}"]//*[contains(@class, "todo-title")][text() = "{title}"]'))
 
-def xpath_to_find_card_with_title(title):
-    return f'//*[contains(@class, "todo-title")][text() = "{title}"]/ancestor::*[contains(@class, "todo-item")]'
+def get_card_with_title(driver, list_id, title):
+    return driver.find_element_by_xpath(f'//*[@id="{list_id}"]//*[contains(@class, "todo-title")][text() = "{title}"]/ancestor::*[contains(@class, "todo-item")]')

@@ -8,10 +8,10 @@
   Due: <b>{{ task.due }}</b>
   <br>
   {% if status == 'TODO' %}
-  <button class="move-list btn btn-outline-success" type="button" data-target-list="DOING">Start</button>
+  <button class="move-list move-doing-list btn btn-outline-success" type="button" data-target-list="DOING">Start</button>
   {% endif %}
   {% if status != 'DONE' %}
-  <button class="move-list btn btn-outline-success" type="button" data-target-list="DONE">Complete</button>
+  <button class="move-list move-done-list btn btn-outline-success" type="button" data-target-list="DONE">Complete</button>
   {% endif %}
   <button class="remove-task btn btn-outline-danger" type="button">Remove</button>
 </li>
