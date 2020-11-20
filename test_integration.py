@@ -26,6 +26,10 @@ def client():
     with test_app.test_client() as client:
         yield client
 
+    # Restore proper config
+    file_path = find_dotenv('.env')
+    load_dotenv(file_path, override=True)
+
 
 def test_index_page(monkeypatch, client):
 
