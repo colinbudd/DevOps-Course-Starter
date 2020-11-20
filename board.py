@@ -2,40 +2,52 @@ import requests
 import os
 from todo_item import TodoItem, Status
 
+
+def create_trello_board():
+    print(f'Creating board: {os.environ["TRELLO_BOARD_NAME"]}')
+    params = {
+        "key": os.environ['TRELLO_KEY'], 
+        "token": os.environ['TRELLO_TOKEN'],
+        "name": os.environ['TRELLO_BOARD_NAME']
+        }
+    requests.post(f'https://api.trello.com/1/boards/', params=params)
+    boards = requests.get(f'https://api.trello.com/1/members/{os.environ["TRELLO_USERNAME"]}/boards', params=params).json()
+    for board in boards:
+        if board['name'] == os.environ['TRELLO_BOARD_NAME']:
+            return board['id']
+
+
+def delete_trello_board(board_id):
+    print(f'Deleting board: {os.environ["TRELLO_BOARD_NAME"]}')
+    delete_params = {
+        "key": os.environ['TRELLO_KEY'], 
+        "token": os.environ['TRELLO_TOKEN']
+        }
+    requests.delete(f'https://api.trello.com/1/boards/{board_id}', params=delete_params)
+
+
 class Board:
 
-    def __init__(self, board_id=0, todo_list_id=0, doing_list_id=0, done_list_id=0):
+    def __init__(self, todo_list_id=0, doing_list_id=0, done_list_id=0):
         """
         Initialisation
-        Use board and list IDs if supplied.
-
-        Otherwise check whether board already exists.
-        If board exists then obtain the board and list IDs.
-        If not then create board and repeat loop to obtain IDs.
+        Use list IDs if supplied, otherwise call Trello to obtain the list IDs.
         """
         self.trello_auth_params = {"key": os.environ['TRELLO_KEY'], "token": os.environ['TRELLO_TOKEN']}
-        self.board_id = board_id
-        self.doing_list_id = doing_list_id
-        self.done_list_id = done_list_id
-        self.todo_list_id = todo_list_id
-        while self.board_id == 0:
-            boards = requests.get(f'https://api.trello.com/1/members/{os.environ["TRELLO_USERNAME"]}/boards', params=self.trello_auth_params).json()
-            for board in boards:
-                if board['name'] == os.environ['TRELLO_BOARD_NAME']:
-                    self.board_id = board['id']
-                    lists = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/lists', params=self.trello_auth_params).json()
-                    for list in lists:
-                        if list['name'].lower() == 'to do':
-                            self.todo_list_id = list['id']
-                        elif list['name'].lower() == 'done':
-                            self.done_list_id = list['id']
-                        elif list['name'].lower() == 'doing':
-                            self.doing_list_id = list['id']
-            if self.board_id == 0:
-                print(f'Creating new board')
-                post_params = self.trello_auth_params.copy()
-                post_params['name'] = os.environ['TRELLO_BOARD_NAME']
-                requests.post(f'https://api.trello.com/1/boards/', params=post_params)
+        self.board_id = os.environ['TRELLO_BOARD_ID']
+        if (todo_list_id != 0):
+            self.todo_list_id = todo_list_id
+            self.doing_list_id = doing_list_id
+            self.done_list_id = done_list_id
+        else:
+            lists = requests.get(f'https://api.trello.com/1/boards/{self.board_id}/lists', params=self.trello_auth_params).json()
+            for list in lists:
+                if list['name'].lower() == 'to do':
+                    self.todo_list_id = list['id']
+                elif list['name'].lower() == 'done':
+                    self.done_list_id = list['id']
+                elif list['name'].lower() == 'doing':
+                    self.doing_list_id = list['id']
 
 
     def list_to_status(self, list_id):

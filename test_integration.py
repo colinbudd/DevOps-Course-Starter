@@ -13,13 +13,13 @@ class MockResponse(object):
 
 
 @pytest.fixture
-def client(monkeypatch):
+def client():
     # Use our test integration config instead of the 'real' version
     file_path = find_dotenv('.env.test')
     load_dotenv(file_path, override=True)
 
     # Create the new app.
-    test_app = create_app('test-board-id', 'test-todo-list-id', 'test-doing-list-id', 'test-done-list-id')
+    test_app = create_app('test-todo-list-id', 'test-doing-list-id', 'test-done-list-id')
 
     # Use the app to create a test_client that can be used in our tests.
     test_app.testing = True
@@ -31,7 +31,7 @@ def test_index_page(monkeypatch, client):
 
     # Arrange
     def mock_get(url, params):
-        assert url == f'https://api.trello.com/1/boards/test-board-id/cards'
+        assert url == f'https://api.trello.com/1/boards/trello-board-id/cards'
         assert params['key'] == 'trello-key'
         assert params['token'] == 'trello-token'
         return MockResponse(
@@ -62,4 +62,8 @@ def test_index_page(monkeypatch, client):
 
     # Assert
     assert response.status_code == 200
-    assert "test-item-1" in response.data.decode('utf-8')
+
+    decoded_response = response.data.decode('utf-8')
+
+    assert "test-item-1" in decoded_response
+    assert "test-item-2" in decoded_response

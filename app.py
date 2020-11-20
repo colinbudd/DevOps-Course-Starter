@@ -4,11 +4,11 @@ from view_model import ViewModel
 from todo_item import Status
 from datetime import date, datetime
 
-def create_app(board_id=0, todo_list_id=0, doing_list_id=0, done_list_id=0):
+def create_app(todo_list_id=0, doing_list_id=0, done_list_id=0):
     app = Flask(__name__)
     app.config.from_object('flask_config.Config')
 
-    my_board = Board(board_id, todo_list_id, doing_list_id, done_list_id)
+    my_board = Board(todo_list_id, doing_list_id, done_list_id)
 
     def task_sorting_key(task):
         if (task.status == Status.DONE):
