@@ -51,8 +51,24 @@ def test_task_journey(driver, test_app):
     # Wait for the page reload
 
     w = WebDriverWait(driver, 8)
-    w.until(expected_conditions.presence_of_element_located((By.XPATH, f'//*[contains(@class, "todo-title")][text() = "{todo_title}"]')))
+    w.until(condition_to_find_element_with_title(todo_title))
 
-    # Check new item created
+    # Check the new item
 
+    card = driver.find_element_by_xpath(xpath_to_find_card_with_title(todo_title))
     
+    description = card.find_elements_by_class_name('todo-description')[0].text
+
+    assert description == todo_description
+
+    # Click the complete button
+
+
+
+# Helper methods
+
+def condition_to_find_element_with_title(title):
+    return expected_conditions.presence_of_element_located((By.XPATH, f'//*[contains(@class, "todo-title")][text() = "{title}"]'))
+
+def xpath_to_find_card_with_title(title):
+    return f'//*[contains(@class, "todo-title")][text() = "{title}"]/ancestor::*[contains(@class, "todo-item")]'

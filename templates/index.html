@@ -24,7 +24,7 @@
       <div class="col-md-4">
         {% set status = "TODO" %}
         <h2>Not started</h2>
-        <ul class="list-group mb-4">
+        <ul id="todo-list" class="list-group mb-4">
           {% for task in view_model.todo_items %}
           {% include "card.html" %}
           {% endfor %}
@@ -33,7 +33,7 @@
       <div class="col-md-4">
         {% set status = "DOING" %}
         <h2>In progress</h2>
-        <ul class="list-group mb-4">
+        <ul id="doing-list" class="list-group mb-4">
           {% for task in view_model.doing_items %}
           {% include "card.html" %}
           {% endfor %}
@@ -43,7 +43,7 @@
         {% set status = "DONE" %}
         <h2>Complete</h2>
         <input type="checkbox" class="showAllDoneItems" {% if view_model.show_all_done_items %}checked{% endif %}> Show all</input>
-        <ul class="list-group mb-4">
+        <ul id="done-list" class="list-group mb-4">
           {% for task in view_model.recent_done_items(today) %}
           {% include "card.html" %}
           {% endfor %}
