@@ -6,50 +6,54 @@
     <h1 class="display-4">To-Do App</h1>
     <p class="lead">Just another to-do app.</p>
   </div>
-
-  <div class="row">
-    <div class="col-md-12">
-      <h2>Items</h2>
-      <ul class="list-group mb-4">
-        {% for task in tasks %}
-        {% if task.status != 'Done' %}
-        <li data-task-id='{{ task.id }}' class="list-group-item">
-          {{ task.title }}
-          <span class="badge badge-danger badge-pill">{{ task.status }}</span>
-          <button class="mark-complete btn btn-outline-success" type="button">Mark Complete</button>
-          <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
-          <br>
-          <i>{{ task.description}}</i>
-          <br>
-          Due: <b>{{ task.due }}</b>
-        </li>
-        {% else %}
-        <li data-task-id='{{ task.id }}' class="list-group-item list-group-item-light">
-          {{ task.title }} 
-          <span class="badge badge-success badge-pill">{{ task.status }}</span>
-          <button class="remove-task btn btn-outline-danger" type="button">Remove Item</button>
-          <br>
-          <i>{{ task.description}}</i>
-          <br>
-          Due: <b>{{ task.due }}</b>
-        </li>
-        {% endif %}
-        {% endfor %}
-        <li class="list-group-item">
-          <form class="list-group mb-4" method="POST" target="/" style="display:inline-block">
-            <label for="title">New Item:</label>
-            <input type="text" name="title" />
-            <br>
-            <label for="description">Description:</label>
-            <textarea name="description" rows="5"></textarea>
-            <br>
-            <label for="due">Due:</label>
-            <input type="text" name="due" class="datepicker">
-            <br>
-            <button type="submit" class="btn btn-success">Add</button>
-          </form>
-        </li>
-      </ul>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="list-group mb-4" method="POST" target="_self" style="display:inline-block">
+          <label for="title">New Item:</label>
+          <input id="title" type="text" name="title" />
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" rows="5"></textarea>
+          <label for="due">Due:</label>
+          <input type="text" name="due" class="datepicker">
+          <button id="add-new-todo" type="submit" class="btn btn-success">Add</button>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        {% set status = "TODO" %}
+        <h2>Not started</h2>
+        <ul id="todo-list" class="list-group mb-4">
+          {% for task in view_model.todo_items %}
+          {% include "card.html" %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-4">
+        {% set status = "DOING" %}
+        <h2>In progress</h2>
+        <ul id="doing-list" class="list-group mb-4">
+          {% for task in view_model.doing_items %}
+          {% include "card.html" %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-4">
+        {% set status = "DONE" %}
+        <h2>Complete</h2>
+        <input type="checkbox" class="showAllDoneItems" {% if view_model.show_all_done_items %}checked{% endif %}> Show all</input>
+        <ul id="done-list" class="list-group mb-4">
+          {% for task in view_model.recent_done_items(today) %}
+          {% include "card.html" %}
+          {% endfor %}
+          {% if view_model.show_all_done_items %}
+          {% for task in view_model.older_done_items(today) %}
+          {% include "card.html" %}
+          {% endfor %}
+          {% endif %}
+        </ul>
+      </div>
     </div>
   </div>
 {% endblock %}

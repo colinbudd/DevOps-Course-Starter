@@ -115,5 +115,5 @@ env/
 ### Configuration files ###
 .env
 
-### Secrets ###
-config.py
+### Gecko driver log ###
+geckodriver.log

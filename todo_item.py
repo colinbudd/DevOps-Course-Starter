@@ -1,23 +1,28 @@
-from config import KEY, TOKEN
-import requests
+from enum import Enum
 from datetime import datetime
 
-class todo_item:
 
-    def __init__(self, json):
+class Status(Enum):
+    TODO = 1
+    DOING = 2
+    DONE = 3
+
+
+class TodoItem:
+
+    def __init__(self, json, status):
         """
         Initialisation
         Construct a todo item from JSON
         """
+        self._status = status
         self._title = json['name']
         self._id = json['id']
         self._description = json['desc']
         self._due = json['due']
+        self._last_activity = json['dateLastActivity']
         if json['due']:
             self._due = datetime.strptime(json['due'], '%Y-%m-%dT%H:%M:%S.%fZ').strftime("%A, %d %b %Y")
-        list_json = requests.get(f'https://api.trello.com/1/cards/{self._id}/list?key={KEY}&token={TOKEN}').json()
-        self._list = list_json['name']
-
 
     @property
     def title(self):
@@ -37,4 +42,8 @@ class todo_item:
 
     @property
     def status(self):
-        return self._list
+        return self._status
+
+    @property
+    def last_activity(self):
+        return self._last_activity

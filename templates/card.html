@@ -1,0 +1,17 @@
+<li data-task-id='{{ task.id }}' class="list-group-item list-group-item-light todo-item">
+  <strong class='todo-title'>{{ task.title }}</strong>
+  {% if task.description %}
+  <br>
+  <i class='todo-description'>{{ task.description}}</i>
+  {% endif %}
+  <br>
+  Due: <b>{{ task.due }}</b>
+  <br>
+  {% if status == 'TODO' %}
+  <button class="move-list move-doing-list btn btn-outline-success" type="button" data-target-list="DOING">Start</button>
+  {% endif %}
+  {% if status != 'DONE' %}
+  <button class="move-list move-done-list btn btn-outline-success" type="button" data-target-list="DONE">Complete</button>
+  {% endif %}
+  <button class="remove-task btn btn-outline-danger" type="button">Remove</button>
+</li>
