@@ -11,7 +11,7 @@ def create_trello_board():
         "name": os.environ['TRELLO_BOARD_NAME']
         }
     requests.post(f'https://api.trello.com/1/boards/', params=params)
-    boards = requests.get(f'https://api.trello.com/1/members/{os.environ["TRELLO_USERNAME"]}/boards', params=params).json()
+    boards = requests.get(f'https://api.trello.com/1/members/me/boards', params=params).json()
     for board in boards:
         if board['name'] == os.environ['TRELLO_BOARD_NAME']:
             return board['id']

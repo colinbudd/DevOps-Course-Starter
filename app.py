@@ -6,7 +6,6 @@ from datetime import date, datetime
 
 def create_app(todo_list_id=0, doing_list_id=0, done_list_id=0):
     app = Flask(__name__)
-    app.config.from_object('flask_config.Config')
 
     my_board = Board(todo_list_id, doing_list_id, done_list_id)
 
@@ -49,10 +48,8 @@ def create_app(todo_list_id=0, doing_list_id=0, done_list_id=0):
 
     #pylint: enable=unused-variable
     
+    if __name__ == '__main__':
+        app.run()
+
     return app
 
-
-app = create_app()
-
-if __name__ == '__main__':
-    app.run()

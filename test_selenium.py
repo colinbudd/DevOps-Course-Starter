@@ -37,6 +37,8 @@ def driver():
 def test_task_journey(driver, test_app):
     driver.get('http://localhost:5000/')
 
+    driver.implicitly_wait(10)
+
     assert driver.title == 'To-Do App'
 
     todo_title = 'Test Todo Item'
@@ -47,11 +49,6 @@ def test_task_journey(driver, test_app):
     driver.find_element_by_id('title').send_keys(todo_title)
     driver.find_element_by_id('description').send_keys(todo_description)
     driver.find_element_by_id('add-new-todo').click()
-
-    # Wait for the page reload
-
-    w = WebDriverWait(driver, 8)
-    w.until(condition_to_find_element_with_title('todo-list', todo_title))
 
     # Check the new item
 
@@ -64,11 +61,6 @@ def test_task_journey(driver, test_app):
 
     card.find_element_by_class_name('move-doing-list').click()
 
-    # Wait for the page reload
-
-    w = WebDriverWait(driver, 8)
-    w.until(condition_to_find_element_with_title('doing-list', todo_title))
-
     # Check the started item
 
     card = get_card_with_title(driver, 'doing-list', todo_title)
@@ -79,11 +71,6 @@ def test_task_journey(driver, test_app):
     # Click the complete button
 
     card.find_element_by_class_name('move-done-list').click()
-
-    # Wait for the page reload
-
-    w = WebDriverWait(driver, 8)
-    w.until(condition_to_find_element_with_title('done-list', todo_title))
 
     # Check the completed item
 

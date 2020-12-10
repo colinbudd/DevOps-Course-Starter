@@ -46,8 +46,6 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 
 The `.env` file is used by flask to set environment variables when running `flask run`. This enables things like developement mode (which also enables features like hot reloading when you make a file change).
 
-* There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie.
-
 When running `setup.sh`, the `.env.template` file will be copied to `.env` if the latter does not exist.
 
 ### Trello Secrets
@@ -56,6 +54,5 @@ The `.env` file also holds Trello secrets. Edit this file to set the following v
 
 * TRELLO_TOKEN
 * TRELLO_KEY
-* TRELLO_USERNAME
 * TRELLO_BOARD_NAME
 * TRELLO_BOARD_ID

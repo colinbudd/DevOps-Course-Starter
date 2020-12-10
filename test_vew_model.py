@@ -59,10 +59,6 @@ def test_get_todo_items(view_model):
     assert len(todo_items) == 2
     assert todo_item_1 in todo_items
     assert todo_item_2 in todo_items
-    assert doing_item_1 not in todo_items
-    assert doing_item_2 not in todo_items
-    assert done_item_1 not in todo_items
-    assert done_item_2 not in todo_items
 
 
 def test_get_doing_items(view_model):
@@ -72,12 +68,8 @@ def test_get_doing_items(view_model):
 
     # Assert
     assert len(doing_items) == 2
-    assert todo_item_1 not in doing_items
-    assert todo_item_2 not in doing_items
     assert doing_item_1 in doing_items
     assert doing_item_2 in doing_items
-    assert done_item_1 not in doing_items
-    assert done_item_2 not in doing_items
 
 
 def test_get_done_items(view_model):
@@ -87,10 +79,6 @@ def test_get_done_items(view_model):
 
     # Assert
     assert len(done_items) == 2
-    assert todo_item_1 not in done_items
-    assert todo_item_2 not in done_items
-    assert doing_item_1 not in done_items
-    assert doing_item_2 not in done_items
     assert done_item_1 in done_items
     assert done_item_2 in done_items
 
@@ -116,12 +104,7 @@ def test_recent_done_items(view_model):
 
     # Assert
     assert len(recent_done_items) == 1
-    assert todo_item_1 not in recent_done_items
-    assert todo_item_2 not in recent_done_items
-    assert doing_item_1 not in recent_done_items
-    assert doing_item_2 not in recent_done_items
     assert done_item_1 in recent_done_items
-    assert done_item_2 not in recent_done_items
 
 
 def test_older_done_items(view_model):
@@ -131,10 +114,5 @@ def test_older_done_items(view_model):
 
     # Assert
     assert len(older_done_items) == 1
-    assert todo_item_1 not in older_done_items
-    assert todo_item_2 not in older_done_items
-    assert doing_item_1 not in older_done_items
-    assert doing_item_2 not in older_done_items
-    assert done_item_1 not in older_done_items
     assert done_item_2 in older_done_items
 
