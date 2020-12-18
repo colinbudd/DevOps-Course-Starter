@@ -120,3 +120,6 @@ geckodriver.log
 
 ### Vagrant files ###
 .vagrant/
+
+### TODO application log file ###
+todo.log
