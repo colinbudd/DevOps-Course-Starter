@@ -83,8 +83,5 @@ def test_task_journey(driver, test_app):
 
 # Helper methods
 
-def condition_to_find_element_with_title(list_id, title):
-    return expected_conditions.presence_of_element_located((By.XPATH, f'//*[@id="{list_id}"]//*[contains(@class, "todo-title")][text() = "{title}"]'))
-
 def get_card_with_title(driver, list_id, title):
     return driver.find_element_by_xpath(f'//*[@id="{list_id}"]//*[contains(@class, "todo-title")][text() = "{title}"]/ancestor::*[contains(@class, "todo-item")]')
