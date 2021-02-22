@@ -1,0 +1,27 @@
+# Caches
+**/__pycache__/
+.pytest_cache
+
+# Virtual environments
+env/
+
+# VS Code
+.vscode
+.jshintrc
+
+# Vagrant
+.vagrant
+Vagrantfile
+
+# Secrets
+.env
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+
+# Docker
+Dockerfile

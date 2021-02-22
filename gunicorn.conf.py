@@ -1,4 +1,6 @@
 daemon=True
 capture_output=True
 loglevel='debug'
-errorlog='./todo.log'
+errorlog='/var/logs/errors'
+logfile='/var/logs/log'
+pidfile='None'

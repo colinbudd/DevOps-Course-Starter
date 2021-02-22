@@ -22,7 +22,21 @@ source setup.sh
 source setup.sh --windows
 ```
 
-Once the setup script has completed and all packages have been installed, start the Flask app by running:
+### Poetry
+
+Install poetry.
+
+## Execution
+
+You have three choices for running the app:
+
+1. Local execution
+1. With Vagrant
+1. With Docker
+
+### Running the app locally
+
+Start the app with:
 
 ```bash
 flask run
@@ -42,7 +56,15 @@ You should see output similar to the following:
 
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
-### Notes
+### Running the app with Vagrant
+
+```bash
+vagrant up
+```
+
+## Notes
+
+### .env
 
 The `.env` file is used by flask to set environment variables when running `flask run`. This enables things like developement mode (which also enables features like hot reloading when you make a file change).
 

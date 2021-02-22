@@ -48,8 +48,8 @@ def create_app(todo_list_id=0, doing_list_id=0, done_list_id=0):
 
     #pylint: enable=unused-variable
     
-    if __name__ == '__main__':
-        app.run()
+    #if __name__ == '__main__':
+    #    app.run()
 
     return app
 

@@ -115,11 +115,8 @@ env/
 ### Configuration files ###
 .env
 
-### Gecko driver log ###
-geckodriver.log
-
 ### Vagrant files ###
 .vagrant/
 
-### TODO application log file ###
-todo.log
+### log files ###
+*.log

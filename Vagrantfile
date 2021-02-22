@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
     trigger.run_remote = {privileged: false, inline: "
       cd /vagrant
       poetry install
-      poetry run gunicorn --bind 0.0.0.0:5000 appserver:gunicorn_app
+      nohup poetry run gunicorn --bind 0.0.0.0:5000 appserver:gunicorn_app > logs.txt 2>&1 &
     "}
   end
 
