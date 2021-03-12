@@ -62,6 +62,36 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 vagrant up
 ```
 
+### Running the app with Docker
+
+#### Development image
+
+Build
+
+```bash
+docker build --target development --tag todo-app:dev .
+```
+
+Run
+
+```bash
+docker run -p 5000:5000 --env-file .env --mount type=bind,source="$(pwd)",target=/app/ todo-app:dev
+```
+
+#### Production image
+
+Build
+
+```bash
+docker build --target production --tag todo-app:prod .
+```
+
+Run
+
+```bash
+docker run -p 5000:5000 --env-file .env todo-app:prod
+```
+
 ## Notes
 
 ### .env
